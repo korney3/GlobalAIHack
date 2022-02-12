@@ -48,5 +48,5 @@ class Data():
         return processed_smiles
 
     def change_str_target_to_int(self, targets:  pd.Series):
-        target = targets.map(self.target_map)
-        return target
+        processed_targets = targets.map(self.target_map)
+        return processed_targets.values
