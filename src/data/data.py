@@ -19,13 +19,15 @@ class Data():
         self.smiles = None
         self.targets = None
 
+        self.target_map = {True: 1, False: 0}
+
     def get_processed_smiles_and_targets(self):
         self.data = self.load_train_data()
         list_of_smiles = self.data[self.smiles_column]
         processed_list_of_smiles = self.process_list_of_smiles(list_of_smiles)
         self.smiles = processed_list_of_smiles
         if self.y_column in list(self.data):
-            self.targets = self.data[self.y_column]
+            self.targets = self.change_str_target_to_int(self.data[self.y_column])
 
         return self.smiles, self.targets
 
@@ -44,3 +46,7 @@ class Data():
         res = remover.StripMol(mol)
         processed_smiles = Chem.MolToSmiles(mol)
         return processed_smiles
+
+    def change_str_target_to_int(self, targets:  pd.Series):
+        target = targets.map(self.target_map)
+        return target

@@ -14,7 +14,7 @@ def main():
     smiles_train, y_train = train_data.get_processed_smiles_and_targets()
 
     test_data = Data(filename=TEST_FILE)
-    smiles_test, _ = train_data.get_processed_smiles_and_targets()
+    smiles_test, _ = test_data.get_processed_smiles_and_targets()
 
     train_morgan_fp = list(map(lambda x: get_morgan_fingerprint(x), smiles_train))
     test_morgan_fp = list(map(lambda x: get_morgan_fingerprint(x), smiles_test))
@@ -31,7 +31,15 @@ def main():
         'max_depth': [10, 100, 200, 300, 500, 600],
         'n_estimators': [50, 100, 200, 300, 400]
     }
-    xgb = XGBClassifier(learning_rate=0.02, n_estimators=600, objective='logloss',nthread=1)
+    params = {
+        # 'min_child_weight': [1, 5, 10],
+        # 'gamma': [0.5, 1, 1.5, 2, 5],
+        # 'subsample': [0.6, 0.8, 1.0],
+        # 'colsample_bytree': [0.6, 0.8, 1.0],
+        'max_depth': [100],
+        'n_estimators': [400]
+    }
+    xgb = XGBClassifier(learning_rate=0.02, n_estimators=600,  nthread=1)
     folds = 6
 
     skf = StratifiedKFold(n_splits=folds, shuffle=True, random_state=1001)
@@ -44,8 +52,8 @@ def main():
     print(grid_search.cv_results_)
     print('\n Best estimator:')
     print(grid_search.best_estimator_)
-    print('\n Best normalized gini score for %d-fold search with:' % (folds))
-    print(grid_search.best_score_ * 2 - 1)
+    print('\n Best  for %d-fold search with:' % (folds))
+    print(grid_search.best_score_)
     print('\n Best hyperparameters:')
     print(grid_search.best_params_)
 
