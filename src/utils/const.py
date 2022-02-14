@@ -14,3 +14,6 @@ TEST_FILE = "test.csv"
 SMILES_COLUMN = "Smiles"
 TARGET_COLUMN = "Active"
 
+THREADS = os.cpu_count()
+
+SCORING="f1"
