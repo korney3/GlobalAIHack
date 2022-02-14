@@ -1,7 +1,13 @@
 from dataclasses import dataclass
+from enum import Enum
 from typing import Any, Dict
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from src.utils.const import THREADS, SCORING
+
+
+class Algorithm(Enum):
+    GRID_SEARCH = "Grid search"
+    RANDOM_SEARCH = "Random search"
 
 
 @dataclass
@@ -21,11 +27,20 @@ class Params:
 
 
 class HyperparamsSearch:
-    def __init__(self, model: Any, params: Dict, cv: Any, verbose: int) -> None:
-        self.search = GridSearchCV(model, param_grid=params, scoring=SCORING, n_jobs=THREADS, cv=cv, verbose=verbose)
+    def __init__(self, algorithm: Algorithm, estimator: Any, params: Dict, cv: Any, verbose: int = 0) -> None:
+        if algorithm == Algorithm.GRID_SEARCH:
+            self.search = GridSearchCV(
+                estimator, params, scoring=SCORING, n_jobs=THREADS, cv=cv, verbose=verbose
+            )
+        elif algorithm == Algorithm.RANDOM_SEARCH:
+            self.search = RandomizedSearchCV(
+                estimator, params, scoring=SCORING, n_jobs=THREADS, cv=cv, verbose=verbose
+            )
+        else:
+            raise Exception("No such search algorithm")
 
-    def fit(self, train_morgan_fp, y_train) -> None:
-        self.search.fit(train_morgan_fp, y_train)
+    def fit(self, X, y) -> None:
+        self.search.fit(X, y)
 
     def best_estimator(self) -> Any:
         return self.search.best_estimator_

@@ -5,7 +5,7 @@ from src.baselines.morgan_fingerprints import get_morgan_fingerprint
 from src.data import Data
 from src.data.save_predictions import save_prediction
 from src.utils.const import TRAIN_FILE, TEST_FILE, SMILES_COLUMN
-from src.baselines.hyperparams_search import Params, HyperparamsSearch
+from src.baselines.hyperparams_search import Algorithm, Params, HyperparamsSearch
 
 
 def main():
@@ -25,8 +25,9 @@ def main():
     skf = StratifiedKFold(n_splits=folds, shuffle=True, random_state=1001)
 
     search = HyperparamsSearch(
+        Algorithm.GRID_SEARCH,
         xgb,
-        params=Params.XGBOOST_LIGHT,
+        Params.XGBOOST_LIGHT,
         cv=skf.split(train_morgan_fp, y_train),
         verbose=3
     )
