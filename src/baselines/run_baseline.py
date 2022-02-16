@@ -1,11 +1,12 @@
-import xgboost as xgb
-from sklearn.model_selection import StratifiedKFold, GridSearchCV
+from dgllife.utils import ScaffoldSplitter
+from sklearn.model_selection import GridSearchCV
 from xgboost import XGBClassifier
 
-from src.baselines.morgan_fingerprints import get_morgan_fingerprint
+from src.data.get_cv_splitter import get_cv_splitter
+from src.data.get_fingerprints import get_np_array_of_fps
 from src.data import Data
 from src.data.save_predictions import save_prediction
-from src.utils.const import TRAIN_FILE, TEST_FILE, SMILES_COLUMN
+from src.utils.const import TRAIN_FILE, TEST_FILE, SMILES_COLUMN, Fingerprints, CVSplitters
 
 
 def main():
@@ -16,25 +17,24 @@ def main():
     test_data = Data(filename=TEST_FILE)
     smiles_test, _ = test_data.get_processed_smiles_and_targets()
 
-    train_morgan_fp = list(map(lambda x: get_morgan_fingerprint(x), smiles_train))
-    test_morgan_fp = list(map(lambda x: get_morgan_fingerprint(x), smiles_test))
+    print('\n Get fingerprints')
+    train_morgan_fp = get_np_array_of_fps(fp_type=Fingerprints.ECFP4, smiles=smiles_train)
+    test_morgan_fp = get_np_array_of_fps(fp_type=Fingerprints.ECFP4, smiles=smiles_test)
 
+    print('\n Get CV splits')
 
-    params = {
-        # 'min_child_weight': [1, 5, 10],
-        # 'gamma': [0.5, 1, 1.5, 2, 5],
-        # 'subsample': [0.6, 0.8, 1.0],
-        # 'colsample_bytree': [0.6, 0.8, 1.0],
-        'max_depth': [50, 100, 200, 300, 500, 600, 900],
-        'n_estimators': [300, 400, 500, 1000]
-    }
-    xgb = XGBClassifier(learning_rate=0.02, n_estimators=600, nthread=1)
     folds = 4
-
-    skf = StratifiedKFold(n_splits=folds, shuffle=True, random_state=1001)
+    cv_splits = get_cv_splitter(CVSplitters.Scaffold_CV, train_data, y_train, k_folds=folds, random_state=69)
+    params = {
+        # 'alpha': [0, 1, 2, 5],
+        # 'gamma': [0, 1, 2, 5],
+        'max_depth': [50, 200, 500, 900],
+        'n_estimators': [500, 1000]
+    }
+    xgb = XGBClassifier(learning_rate=0.02, n_estimators=600, nthread=1, use_label_encoder=False)
 
     grid_search = GridSearchCV(xgb, param_grid=params, scoring='f1', n_jobs=4,
-                               cv=skf.split(train_morgan_fp, y_train), verbose=3)
+                               cv=cv_splits, verbose=1000)
     print('\n Start Grid Search')
     grid_search.fit(train_morgan_fp, y_train)
     print('\n All results:')
