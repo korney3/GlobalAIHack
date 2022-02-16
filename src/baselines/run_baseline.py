@@ -1,4 +1,5 @@
 from sklearn.model_selection import StratifiedKFold
+from catboost import CatBoostClassifier
 from xgboost import XGBClassifier
 
 from src.baselines.morgan_fingerprints import get_morgan_fingerprint
@@ -9,6 +10,7 @@ from src.baselines.hyperparams_search import Algorithm, Params, HyperparamsSearc
 
 
 def main():
+    # Preprocessing
     print('\n Loading and preprocess data')
     train_data = Data(filename=TRAIN_FILE)
     smiles_train, y_train = train_data.get_processed_smiles_and_targets()
@@ -19,29 +21,28 @@ def main():
     train_morgan_fp = list(map(lambda x: get_morgan_fingerprint(x), smiles_train))
     test_morgan_fp = list(map(lambda x: get_morgan_fingerprint(x), smiles_test))
 
-    xgb = XGBClassifier(learning_rate=0.02, n_estimators=600, nthread=1)
+    # Setting up model
+    model = XGBClassifier()
+    # model = CatBoostClassifier()
+
     folds = 4
 
     skf = StratifiedKFold(n_splits=folds, shuffle=True, random_state=1001)
 
     search = HyperparamsSearch(
-        Algorithm.GRID_SEARCH,
-        xgb,
-        Params.XGBOOST_LIGHT,
+        Algorithm.RANDOM_SEARCH,
+        model,
+        Params.XGBOOST,
         cv=skf.split(train_morgan_fp, y_train),
         verbose=3
     )
-    print('\n Start Grid Search')
+    print("Start search\n")
     search.fit(train_morgan_fp, y_train)
 
-    print('\n All results:')
-    print(search.cv_results())
-    print('\n Best estimator:')
-    print(search.best_estimator())
-    print('\n Best normalized score for %d-fold search with:' % (folds))
-    print(search.best_score())
-    print('\n Best hyperparameters:')
-    print(search.best_params())
+    print("All results:\n", search.cv_results())
+    print("Best estimator:\n", search.best_estimator())
+    print("Best normalized score for %d-fold search with:\n" % (folds), search.best_score())
+    print("Best hyperparameters:\n", search.best_params())
 
     test_predictions = search.best_estimator().predict(test_morgan_fp)
     test_predictions_df = save_prediction(test_data.data[SMILES_COLUMN], test_predictions,

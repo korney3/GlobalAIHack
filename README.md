@@ -6,6 +6,12 @@
 conda create --name GlobalAIHack37 python=3.7
 conda activate GlobalAIHack37
 conda install rdkit -c rdkit
-pip install xgboost
+pip install xgboost catboost
 pip install -U scikit-learn
+```
+
+## Running baseline
+
+```(bash)
+$ python3 src.baselines.run_baseline
 ```

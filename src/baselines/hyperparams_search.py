@@ -13,16 +13,25 @@ class Algorithm(Enum):
 @dataclass
 class Params:
     XGBOOST_LIGHT = {
-        'max_depth': [5, 10],
-        'n_estimators': [30, 40],
+        "max_depth": [5, 10, 20],
+        "learning_rate": [0.001, 0.01, 0.1],
+        "n_estimators": [10, 25, 50],
     }
     XGBOOST = {
-        "max_depth": [50, 100, 200, 300, 500, 600, 900],
-        "n_estimators": [300, 400, 500, 1000],
+        "max_depth": [10, 20, 50, 100, 200],
+        "learning_rate": [0.001, 0.01, 0.1, 0.2],
+        "subsample": [0.5, 0.75, 1.0],
+        "colsample_bytree": [0.4, 0.6, 0.8, 1.0],
+        "colsample_bylevel": [0.4, 0.6, 0.8, 1.0],
+        "min_child_weight": [0.5, 1.0, 3.0, 5.0],
+        "gamma": [0, 0.25, 0.5, 1.0],
+        "reg_lambda": [0.1, 1.0, 5.0, 20.0, 100.0],
+        "n_estimators": [10, 100, 200, 500],
     }
     CATBOOST = {
-        "cbr__iterations": [100, 500, 1000, 2000],
-        "cbr__depth": [3, 5, 10],
+        "depth": [3, 4, 5, 8, 10],
+        "learning_rate": [0.001, 0.01, 0.1],
+        "n_estimators": [10, 25, 50],
     }
 
 
