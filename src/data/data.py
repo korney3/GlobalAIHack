@@ -18,8 +18,12 @@ class Data():
         self.data = None
         self.smiles = None
         self.targets = None
+        self.indices = None
 
         self.target_map = {True: 1, False: 0}
+
+    def __getitem__(self, item):
+        return self.smiles[item], self.indices[item], self.targets[item]
 
     def get_processed_smiles_and_targets(self):
         self.data = self.load_train_data()
@@ -28,7 +32,7 @@ class Data():
         self.smiles = processed_list_of_smiles
         if self.y_column in list(self.data):
             self.targets = self.change_str_target_to_int(self.data[self.y_column])
-
+        self.indices = list(range(len(self.smiles)))
         return self.smiles, self.targets
 
     def load_train_data(self):
