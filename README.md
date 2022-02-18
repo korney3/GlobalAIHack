@@ -11,6 +11,7 @@ pip install -U scikit-learn
 conda install -c dglteam dgl
 conda install pytorch  -c pytorch
 pip install dgllife
+pip install -U imbalanced-learn
 ```
 
 ## Running baseline

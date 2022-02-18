@@ -26,6 +26,9 @@ THREADS = os.cpu_count()
 
 SCORING = "f1"
 
+class ImbalanceStrategies(Enum):
+    UNDERSAMPLE = "udersample"
+    OVERSAMPLE = "oversample"
 
 class FingerprintsNames(Enum):
     TOPOTORSION = "topological_torsion"
