@@ -10,6 +10,7 @@ pip install xgboost catboost
 pip install -U scikit-learn
 conda install -c dglteam dgl
 conda install pytorch  -c pytorch
+pip install dgllife
 ```
 
 ## Running baseline

@@ -4,7 +4,6 @@ import numpy as np
 from rdkit import Chem, DataStructs
 from rdkit.DataStructs import ExplicitBitVect
 
-from src.utils.const import Fingerprints
 
 
 def bit_vectors_to_numpy_arrays(fps: List[ExplicitBitVect]) -> np.array:
@@ -15,7 +14,7 @@ def bit_vectors_to_numpy_arrays(fps: List[ExplicitBitVect]) -> np.array:
     return np.asarray(output_arrays)
 
 
-def get_np_array_of_fps(fp_type: Fingerprints.ECFP4, smiles: List[str]):
+def get_np_array_of_fps(fp_type, smiles: List[str]):
     # Calculate the morgan fingerprint
     mols = [Chem.MolFromSmiles(m) for m in smiles]
     fp = list(map(fp_type, mols))

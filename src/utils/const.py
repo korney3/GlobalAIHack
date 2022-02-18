@@ -24,16 +24,25 @@ TARGET_COLUMN = "Active"
 
 THREADS = os.cpu_count()
 
-SCORING="f1"
+SCORING = "f1"
 
-@dataclass
-class Fingerprints:
-    ECFP4 = partial(AllChem.GetMorganFingerprintAsBitVect, radius=2, nBits=2048)
-    TOPOTORSION = AllChem.GetHashedTopologicalTorsionFingerprintAsBitVect
-    MACCS = MACCSkeys.GenMACCSKeys
-    RDKitFP = Chem.RDKFingerprint
-    PATTERN = Chem.PatternFingerprint
-    ATOMPAIR = AllChem.GetHashedAtomPairFingerprintAsBitVect
+
+class FingerprintsNames(Enum):
+    TOPOTORSION = "topological_torsion"
+    MACCS = "MACCSkeys"
+    RDKitFP = "RDKFingerprint"
+    PATTERN = "PatternFingerprint"
+    ATOMPAIR = "AtomPairFingerprint"
+    ECFP4 = "morgan_2_2048"
+
+
+FINGERPRINTS_METHODS = {FingerprintsNames.TOPOTORSION: AllChem.GetHashedTopologicalTorsionFingerprintAsBitVect,
+                        FingerprintsNames.MACCS: MACCSkeys.GenMACCSKeys,
+                        FingerprintsNames.RDKitFP: Chem.RDKFingerprint,
+                        FingerprintsNames.PATTERN: Chem.PatternFingerprint,
+                        FingerprintsNames.ATOMPAIR: AllChem.GetHashedAtomPairFingerprintAsBitVect,
+                        FingerprintsNames.ECFP4: partial(AllChem.GetMorganFingerprintAsBitVect, radius=2, nBits=2048)
+                        }
 
 
 class CVSplitters(Enum):
