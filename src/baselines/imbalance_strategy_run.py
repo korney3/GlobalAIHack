@@ -15,7 +15,7 @@ def main():
     print('\n Loading and preprocess data')
 
     train_data = Data(filename=TRAIN_FILE)
-    imb_strategy = ImbalanceStrategies.UNDERSAMPLE
+    imb_strategy = None#ImbalanceStrategies.UNDERSAMPLE
     smiles_train, y_train = train_data.get_processed_smiles_and_targets(imb_strategy = imb_strategy)
 
     test_data = Data(filename=TEST_FILE)
@@ -38,7 +38,8 @@ def main():
     params = {
         # 'alpha': [0, 1, 2, 5],
         # 'gamma': [0, 1, 2, 5],
-        'max_depth': [50, 200, 500, 900],
+        "scale_pos_weight": [10, 25, 50],
+        'max_depth': [50, 200],
         'n_estimators': [500, 1000, 2000]
     }
 
@@ -59,7 +60,7 @@ def main():
 
     test_predictions = grid_search.best_estimator_.predict(test_fp)
     test_predictions_df = save_prediction(test_data.data[SMILES_COLUMN], test_predictions,
-                                          f"{fingerprint_type_name.value}_{CVSplitters.Scaffold_CV.value}_{imb_strategy.value}_test_submission.csv")
+                                          f"{fingerprint_type_name.value}_{CVSplitters.Scaffold_CV.value}_xgboost_weights_test_submission.csv")
 
 
 if __name__ == "__main__":
