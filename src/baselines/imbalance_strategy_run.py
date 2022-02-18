@@ -22,7 +22,7 @@ def main():
     smiles_test, _ = test_data.get_processed_smiles_and_targets()
 
     fingerprint_type_name = FingerprintsNames.ECFP4
-    fingerprint_type_method = FINGERPRINTS_METHODS[FingerprintsNames.ECFP4]
+    fingerprint_type_method = FINGERPRINTS_METHODS[fingerprint_type_name]
 
     cv_type = CVSplitters.Scaffold_CV
 
