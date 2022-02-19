@@ -62,3 +62,9 @@ class HyperparamsSearch:
 
     def cv_results(self) -> Any:
         return self.search.cv_results_
+    
+    def best_mean(self) -> float:
+        return self.search.cv_results_["mean_test_score"][self.search.best_index_]
+
+    def best_std(self) -> float:
+        return self.search.cv_results_["std_test_score"][self.search.best_index_]

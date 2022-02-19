@@ -43,6 +43,8 @@ def main():
     print("Best estimator:\n", search.best_estimator())
     print("Best normalized score for %d-fold search with:\n" % (folds), search.best_score())
     print("Best hyperparameters:\n", search.best_params())
+    print("Mean test score:\n", search.best_mean())
+    print("STD test score:\n", search.best_std())
 
     test_predictions = search.best_estimator().predict(test_morgan_fp)
     test_predictions_df = save_prediction(test_data.data[SMILES_COLUMN], test_predictions,
