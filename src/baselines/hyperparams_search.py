@@ -8,6 +8,7 @@ from src.utils.const import THREADS, SCORING
 class Algorithm(Enum):
     GRID_SEARCH = "Grid search"
     RANDOM_SEARCH = "Random search"
+    HYPEROPT = "Hyperopt"
 
 
 @dataclass
@@ -45,6 +46,8 @@ class HyperparamsSearch:
             self.search = RandomizedSearchCV(
                 estimator, params, scoring=SCORING, n_jobs=THREADS, cv=cv, verbose=verbose
             )
+        elif algorithm == Algorithm.HYPEROPT:
+            raise Exception("Not implemented yet")
         else:
             raise Exception("No such search algorithm")
 
