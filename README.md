@@ -12,6 +12,7 @@ conda install -c dglteam dgl
 conda install pytorch  -c pytorch
 pip install dgllife
 pip install -U imbalanced-learn
+pip install biopandas 
 ```
 
 ## Running baseline

@@ -1,14 +1,12 @@
-import pandas as pd
 from sklearn.model_selection import GridSearchCV
 from xgboost import XGBClassifier
 
-from src.data.get_balanced_data import get_balanced_data
+from src.data import Data
 from src.data.get_cv_splitter import get_cv_splitter
 from src.data.get_fingerprints import get_np_array_of_fps
-from src.data import Data
 from src.data.save_predictions import save_prediction
 from src.utils.const import TRAIN_FILE, TEST_FILE, SMILES_COLUMN, CVSplitters, FingerprintsNames, \
-    FINGERPRINTS_METHODS, ImbalanceStrategies
+    FINGERPRINTS_METHODS
 
 
 def main():

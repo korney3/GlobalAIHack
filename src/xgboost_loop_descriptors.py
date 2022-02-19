@@ -1,12 +1,11 @@
 from sklearn.model_selection import GridSearchCV
 from xgboost import XGBClassifier
 
+from src.data import Data
 from src.data.get_cv_splitter import get_cv_splitter
 from src.data.get_fingerprints import get_np_array_of_fps
-from src.data import Data
 from src.data.save_predictions import save_prediction
-from src.utils.const import TRAIN_FILE, TEST_FILE, SMILES_COLUMN, CVSplitters, FingerprintsNames, \
-    FINGERPRINTS_METHODS
+from src.utils.const import TRAIN_FILE, TEST_FILE, SMILES_COLUMN, CVSplitters, FINGERPRINTS_METHODS, FingerprintsNames
 
 
 def main():
@@ -17,7 +16,7 @@ def main():
     test_data = Data(filename=TEST_FILE)
     smiles_test, _ = test_data.get_processed_smiles_and_targets()
 
-    for fingerprint_type_name, fingerprint_type_method in FINGERPRINTS_METHODS.items():
+    for fingerprint_type_name, fingerprint_type_method in [(FingerprintsNames.MACCS, FINGERPRINTS_METHODS[FingerprintsNames.MACCS])]:#FINGERPRINTS_METHODS.items():
         print(f'\n Get fingerprints {fingerprint_type_name}')
         train_fp = get_np_array_of_fps(fp_type=fingerprint_type_method, smiles=smiles_train)
         test_fp = get_np_array_of_fps(fp_type=fingerprint_type_method, smiles=smiles_test)
@@ -32,8 +31,15 @@ def main():
             'max_depth': [50, 200, 500, 900],
             'n_estimators': [500, 1000, 2000]
         }
+        params = {
+            'subsample': [1.0], 'scale_pos_weight': [35], 'reg_lambda': [20.0],
+            'n_estimators': [2000], 'min_child_weight': [0.5], 'max_depth': [100],
+            'learning_rate': [0.2],
+            'gamma': [0.5],
+            'colsample_bytree': [0.7], 'colsample_bylevel': [0.7]
+        }
 
-        xgb = XGBClassifier(learning_rate=0.02, n_estimators=600, nthread=1, use_label_encoder=False)
+        xgb = XGBClassifier(nthread=1, use_label_encoder=False)
 
         grid_search = GridSearchCV(xgb, param_grid=params, scoring='f1', n_jobs=4,
                                    cv=cv_splits, verbose=1000)
