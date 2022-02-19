@@ -18,6 +18,7 @@ DATA_PATH = os.path.join(package_path, "./data")
 PREDICTIONS_PATH = os.path.join(package_path, "./predictions")
 TRAIN_FILE = "train.csv"
 TEST_FILE = "test.csv"
+TARGETPDB_FILE = "target.pdb"
 
 SMILES_COLUMN = "Smiles"
 TARGET_COLUMN = "Active"
