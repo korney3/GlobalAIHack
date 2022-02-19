@@ -68,3 +68,9 @@ class HyperparamsSearch:
 
     def best_std(self) -> float:
         return self.search.cv_results_["std_test_score"][self.search.best_index_]
+
+    def save_best(self, filename: str) -> None:
+        if not os.path.exists(MODELS_PATH):
+            os.mkdir(MODELS_PATH)
+        path = os.path.join(MODELS_PATH, filename)
+        self.search.best_estimator_.save_model(path)

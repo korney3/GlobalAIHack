@@ -16,6 +16,7 @@ package_path = get_project_root()
 
 DATA_PATH = os.path.join(package_path, "./data")
 PREDICTIONS_PATH = os.path.join(package_path, "./predictions")
+MODELS_PATH = os.path.join(package_path, "./models")
 TRAIN_FILE = "train.csv"
 TEST_FILE = "test.csv"
 TARGETPDB_FILE = "target.pdb"

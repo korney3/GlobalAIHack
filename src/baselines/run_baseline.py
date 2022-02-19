@@ -49,6 +49,8 @@ def main():
     test_predictions = search.best_estimator().predict(test_morgan_fp)
     test_predictions_df = save_prediction(test_data.data[SMILES_COLUMN], test_predictions,
                                           "morgan_fp_2_2048_test_submission.csv")
+    ## Use this method to save model:
+    # search.save_best("model_name")
     return
 
 
