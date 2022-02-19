@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Any, Dict
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from src.utils.const import THREADS, SCORING
+import os
 
 
 class Algorithm(Enum):
