@@ -23,15 +23,28 @@ class Params:
         "n_estimators": [10, 25, 50],
     }
     XGBOOST = {
-        "max_depth": [10, 20, 50, 100, 200],
+        "max_depth": [4, 5, 6, 7, 10, 20, 50, 100],
         "learning_rate": [0.001, 0.01, 0.1, 0.2],
-        "subsample": [0.5, 0.75, 1.0],
-        "colsample_bytree": [0.4, 0.6, 0.8, 1.0],
-        "colsample_bylevel": [0.4, 0.6, 0.8, 1.0],
-        "min_child_weight": [0.5, 1.0, 3.0, 5.0],
-        "gamma": [0, 0.25, 0.5, 1.0],
+        "subsample": [0.5, 0.65, 0.75, 0.85, 1.0],
+        "colsample_bytree": [0.4, 0.6, 0.7, 0.8, 1.0],
+        "colsample_bylevel": [0.4, 0.6, 0.7, 0.8, 1.0],
+        "min_child_weight": [0.1, 0.2, 0.3, 0.4, 0.5, 1.0, 3.0],
+        "gamma": [0, 0.01, 0.1, 0.25, 0.5, 1.0],
         "reg_lambda": [0.1, 1.0, 5.0, 20.0, 100.0],
-        "n_estimators": [10, 100, 200, 500],
+        "n_estimators": [100, 200, 500, 600, 750, 1000, 1250, 1500, 1750, 2000],
+        "scale_pos_weight": [10, 15, 20, 25, 30, 35],
+    }
+    XGBOOST_MORGAN_0_3864 = {
+        "subsample": [1.0],
+        "scale_pos_weight": [35],
+        "reg_lambda": [20.0],
+        "n_estimators": [2000],
+        "min_child_weight": [0.5],
+        "max_depth": [100],
+        "learning_rate": [0.2],
+        "gamma": [0.5],
+        "colsample_bytree": [0.7],
+        "colsample_bylevel": [0.7],
     }
 
 
