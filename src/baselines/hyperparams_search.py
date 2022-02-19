@@ -13,6 +13,10 @@ class Algorithm(Enum):
 
 @dataclass
 class Params:
+    BOOSTING_SMOKE_TEST = {
+        "max_depth": [5, 10],
+        "n_estimators": [10, 25],
+    }
     XGBOOST_LIGHT = {
         "max_depth": [5, 10, 20],
         "learning_rate": [0.001, 0.01, 0.1],
@@ -28,11 +32,6 @@ class Params:
         "gamma": [0, 0.25, 0.5, 1.0],
         "reg_lambda": [0.1, 1.0, 5.0, 20.0, 100.0],
         "n_estimators": [10, 100, 200, 500],
-    }
-    CATBOOST = {
-        "depth": [3, 4, 5, 8, 10],
-        "learning_rate": [0.001, 0.01, 0.1],
-        "n_estimators": [10, 25, 50],
     }
 
 
