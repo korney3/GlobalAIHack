@@ -1,52 +1,52 @@
 from sklearn.model_selection import StratifiedKFold
-from catboost import CatBoostClassifier
 from xgboost import XGBClassifier
-
-from src.data.get_fingerprints import get_np_array_of_fps
 from src.data import Data
+from src.data.get_fingerprints import get_np_array_of_fps
 from src.data.save_predictions import save_prediction
-from src.utils.const import TRAIN_FILE, TEST_FILE, SMILES_COLUMN, Fingerprints
+from src.utils.const import TRAIN_FILE, TEST_FILE, SMILES_COLUMN, FINGERPRINTS_METHODS, FingerprintsNames
 from src.baselines.hyperparams_search import Algorithm, Params, HyperparamsSearch
 
 
 def main():
-    # Preprocessing
-    print('\n Loading and preprocess data')
-    train_data = Data(filename=TRAIN_FILE)
-    smiles_train, y_train = train_data.get_processed_smiles_and_targets()
+    print("Loading and preprocessing data\n")
 
+    train_data = Data(filename=TRAIN_FILE)
     test_data = Data(filename=TEST_FILE)
+
+    smiles_train, y_train = train_data.get_processed_smiles_and_targets()
     smiles_test, _ = test_data.get_processed_smiles_and_targets()
 
-    train_morgan_fp = get_np_array_of_fps(fp_type=Fingerprints.ECFP4, smiles=smiles_train)
-    test_morgan_fp = get_np_array_of_fps(fp_type=Fingerprints.ECFP4, smiles=smiles_test)
+    fingerprint_type_name = FingerprintsNames.MACCS
+    fingerprint_type_method = FINGERPRINTS_METHODS[fingerprint_type_name]
 
-    # Setting up model
-    model = XGBClassifier()
-    # model = CatBoostClassifier()
+    train_fp = get_np_array_of_fps(fp_type=fingerprint_type_method, smiles=smiles_train)
+    test_fp = get_np_array_of_fps(fp_type=fingerprint_type_method, smiles=smiles_test)
 
-    folds = 4
+    model = XGBClassifier(verbose=3)
 
-    skf = StratifiedKFold(n_splits=folds, shuffle=True, random_state=1001)
+    skf = StratifiedKFold(n_splits=4, shuffle=True, random_state=1001)
 
     search = HyperparamsSearch(
         Algorithm.RANDOM_SEARCH,
         model,
         Params.XGBOOST,
-        cv=skf.split(train_morgan_fp, y_train),
+        cv=skf.split(train_fp, y_train),
         verbose=3
     )
-    print("Start search\n")
-    search.fit(train_morgan_fp, y_train)
+
+    print("Searching hyperparams\n")
+    search.fit(train_fp, y_train)
 
     print(search)
 
-    test_predictions = search.best_estimator().predict(test_morgan_fp)
-    test_predictions_df = save_prediction(test_data.data[SMILES_COLUMN], test_predictions,
-                                          "morgan_fp_2_2048_test_submission.csv")
-    ## Use this method to save model:
-    # search.save_best("model_name")
-    return
+    test_predictions = search.best_estimator().predict(test_fp)
+    save_prediction(
+        test_data.data[SMILES_COLUMN],
+        test_predictions,
+        "MACCSkeys_xgboost.csv"
+    )
+
+    search.save_best(f"{fingerprint_type_name.value}_xgboost")
 
 
 if __name__ == "__main__":
