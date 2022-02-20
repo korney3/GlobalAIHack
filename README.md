@@ -26,6 +26,16 @@ $ python3 src.baselines.run_baseline
 All saved models are in **models** folder.\
 Use script **runner.py** to load model and make predictions with it.
 
+Options:
+- **-m/--model**\
+Path to file with model
+
+- **-f/--fingerprints**\
+Type of fingerprints. Can be one of ['TOPOTORSION', 'MACCS', 'RDKitFP', 'PATTERN', 'ATOMPAIR', 'ECFP4']
+
+- **-o/--output** (optional)\
+Name of submission file. Will be saved in **models** folder
+
 Example:
 
 ```(bash)
