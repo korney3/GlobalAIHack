@@ -1,6 +1,7 @@
 import os
 from typing import List
 
+import numpy as np
 import pandas as pd
 
 from src.utils.const import SMILES_COLUMN, TARGET_COLUMN, PREDICTIONS_PATH
