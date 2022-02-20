@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-from src.utils.const import THREADS, SCORING
+from src.utils.const import THREADS, SCORING, MODELS_PATH
 import os
 
 
