@@ -34,7 +34,7 @@ Path to file with model
 Type of fingerprints. Can be one of ['TOPOTORSION', 'MACCS', 'RDKitFP', 'PATTERN', 'ATOMPAIR', 'ECFP4']
 
 - **-o/--output** (optional)\
-Name of submission file. Will be saved in **models** folder
+Name of submission file. Will be saved in **predictions** folder
 
 Example:
 
