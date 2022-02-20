@@ -64,6 +64,14 @@ class HyperparamsSearch:
         else:
             raise Exception("No such search algorithm")
 
+    def __repr__(self):
+        return f"All results:\n{self.cv_results()}\n"\
+            f"\nBest estimator:\n{self.best_estimator()}\n"\
+            f"\nBest normalized score:\n{self.best_score()}\n"\
+            f"\nBest hyperparameters:\n{self.best_params()}\n"\
+            f"\nMean test score:\n{self.best_mean()}\n"\
+            f"\nSTD test score:\n{self.best_std()}"
+
     def fit(self, X, y) -> None:
         self.search.fit(X, y)
 
