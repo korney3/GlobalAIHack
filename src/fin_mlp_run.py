@@ -25,7 +25,7 @@ def main():
     test_data = Data(filename=TEST_FILE)
     smiles_test, _ = test_data.get_processed_smiles_and_targets()
 
-    fingerprint_type_name = FingerprintsNames.ECFP4
+    fingerprint_type_name = FingerprintsNames.MACCS
     fingerprint_type_method = FINGERPRINTS_METHODS[fingerprint_type_name]
 
     cv_type = CVSplitters.Scaffold_CV
@@ -50,16 +50,17 @@ def main():
     train_fp_sc = sc.fit_transform(train_fp)
     test_fp_sc = sc.fit_transform(test_fp)
 
-    model = MLPClassifier(max_iter=100, hidden_layer_sizes=(2048, 1024, 512, 256, 128, 2),
-                          n_iter_no_change=5, activation='relu', solver='adam', batch_size=256,
-                          random_state=69, verbose=True, early_stopping=False, alpha=1e-4, learning_rate_init=1e-5,
-                          tol=1e-4)
+    model = MLPClassifier(batch_size=256,
+                          hidden_layer_sizes=(256, 128, 64, 32, 2),
+                          learning_rate_init=1e-05, max_iter=100,
+                          n_iter_no_change=5, random_state=69,
+                          verbose=True, alpha=1e-4)
     print("\n Start training")
     model.fit(train_fp_sc, y_train)
     print("\n Start evaluation")
     test_predictions = model.predict(test_fp_sc)
     test_predictions_df = save_prediction(test_data.data[SMILES_COLUMN], test_predictions,
-                                          f"{fingerprint_type_name.value}_{CVSplitters.Scaffold_CV.value}_mlp_best_test_submission.csv")
+                                          f"{fingerprint_type_name.value}_{CVSplitters.Scaffold_CV.value}_mlp_with_pdb_best_test_submission.csv")
 
 
 if __name__ == "__main__":
