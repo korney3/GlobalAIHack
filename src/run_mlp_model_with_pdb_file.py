@@ -39,11 +39,11 @@ def main():
     train_fp = get_np_array_of_fps(fp_type=fingerprint_type_method, smiles=smiles_train)
     test_fp = get_np_array_of_fps(fp_type=fingerprint_type_method, smiles=smiles_test)
 
-    train_pdb_fp = np.tile(pdb_fp, (len(train_fp), 1))
-    train_fp = np.hstack([train_fp, train_pdb_fp])
-
-    test_pdb_fp = np.tile(pdb_fp, (len(test_fp), 1))
-    test_fp = np.hstack([test_fp, test_pdb_fp])
+    # train_pdb_fp = np.tile(pdb_fp, (len(train_fp), 1))
+    # train_fp = np.hstack([train_fp, train_pdb_fp])
+    #
+    # test_pdb_fp = np.tile(pdb_fp, (len(test_fp), 1))
+    # test_fp = np.hstack([test_fp, test_pdb_fp])
 
     print(f'\n Get CV splits {cv_type.value}')
 
@@ -62,7 +62,7 @@ def main():
     train_fp_sc = sc.fit_transform(train_fp)
     test_fp_sc = sc.fit_transform(test_fp)
 
-    model = MLPClassifier(tol=1e-4, hidden_layer_sizes=(2048, 1024, 512, 256, 128, 2),
+    model = MLPClassifier(tol=1e-4, hidden_layer_sizes=(128, 128, 64, 32, 2),
                           n_iter_no_change=5, activation='relu', solver='adam', batch_size=256,
                           random_state=69, verbose=True, early_stopping=False)
     imba_pipeline = make_pipeline(RandomOverSampler(sampling_strategy="all", random_state=69),
