@@ -42,3 +42,15 @@ Example:
 ```(bash)
 $ ./runner.py -m ./models/MACCSkeys_xgboost_score_0_4731 -f MACCS
 ```
+
+## Results visualization
+
+
+
+Accorfing to feature importance, these 3 MACCS substructures are the most important:
+1. $(*~[CH2]~[CH2]~*),$(*1~[CH2]~[CH2]1) **(ACH2CH2A > 1)**
+2. [#16]~*(~*)~* **(SA(A)A > 1)**
+3. [#7]~*~[#8] **(NAO > 0)**
+
+
+![](./download.png)
