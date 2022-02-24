@@ -49,9 +49,13 @@ $ ./runner.py -m ./models/MACCSkeys_xgboost_score_0_4731 -f MACCS
 
 According to feature importance, these 3 MACCS substructures are the most important:
 ```
-1. $(*~[CH2]~[CH2]~*),$(*1~[CH2]~[CH2]1) #(ACH2CH2A > 1)
-2. [#16]~*(~*)~* #(SA(A)A > 1)
-3. [#7]~*~[#8] #(NAO > 0)
+1. $(*~[CH2]~[CH2]~*),$(*1~[CH2]~[CH2]1) #ACH2CH2A > 1
+2. [#16]~*(~*)~* #SA(A)A > 1
+3. [#7]~*~[#8] #NAO > 0
+4. [#7;!H0] # NH > 0
+5. [#8]~[#16]~[#8] # OSO > 0
+6. [#8]!:*:* # O not %A%A
+7. '[#16]!:*:*' # S not %A%A
 ```
 
 ![](./download.png)
